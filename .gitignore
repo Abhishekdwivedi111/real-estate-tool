@@ -1,0 +1,5 @@
+.env
+resources/vectorstore
+__pycache__
+*.pyc
+.streamlit
