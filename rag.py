@@ -8,6 +8,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
 from langchain_groq import ChatGroq
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
+from prompt import PROMPT, EXAMPLE_PROMPT
 
 load_dotenv()
 
@@ -121,9 +122,14 @@ def generate_answer(query):
         print(f"\nRETRIEVED DOC {i+1}\n")
         print(doc.page_content[:1000])
 
-    chain = RetrievalQAWithSourcesChain.from_llm(
+    chain = RetrievalQAWithSourcesChain.from_chain_type(
         llm=llm,
-        retriever=retriever
+        chain_type="stuff",
+        retriever=retriever,
+        chain_type_kwargs={
+            "prompt": PROMPT,
+            "document_prompt": EXAMPLE_PROMPT
+        }
     )
 
     result = chain.invoke(
